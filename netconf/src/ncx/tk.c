@@ -502,6 +502,7 @@ static tk_token_t *
 
 #ifdef TK_DEBUG
     if (LOGDEBUG3) {
+        printf ("tk_token_t");
         log_debug3("  mod: ");
         while (modlen--) {
             log_debug3("%c", *mod++);

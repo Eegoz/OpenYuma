@@ -2762,10 +2762,16 @@ status_t
                    obj_get_mod_prefix(obj),
                    obj_get_name(obj), 
                    tk_get_btype_sym(obj_get_basetype(obj)));
+    printf("\nagt_val_parse: %s:%s btyp:%s",
+                   obj_get_mod_prefix(obj),
+                   obj_get_name(obj),
+                   tk_get_btype_sym(obj_get_basetype(obj)));
+
     }
 
     /* get the element values */
     res = parse_btype_nc(scb, msg, obj, startnode, parentdc, retval);
+    printf ("Inside agt_val_parse_nc. try ro print res = %d " , res);
     return res;
 
 }  /* agt_val_parse_nc */

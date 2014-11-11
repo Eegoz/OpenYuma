@@ -1368,6 +1368,10 @@ status_t
     boolean          getop;
     status_t         res;
 
+//    printf ("in agt_util. func: agt_output_filter START\n");
+//log_stdout("in agt_util. func: agt_output_filter START\n"); 
+
+
     getop = !xml_strcmp(obj_get_name(msg->rpc_method), 
                         NCX_EL_GET);
     if (getop) {
@@ -1439,6 +1443,10 @@ status_t
     default:
         res = SET_ERROR(ERR_INTERNAL_PTR);
     }
+
+ printf ("in agt_util. func: agt_output_filter FINISH\n");
+log_stdout("in agt_util. func: agt_output_filter FINISH\n");
+
     return res;
                 
 } /* agt_output_filter */

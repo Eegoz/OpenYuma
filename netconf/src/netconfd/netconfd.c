@@ -264,8 +264,14 @@ static status_t
 {
     status_t  res;
 
+    printf("\n I'm in netconf run before show_server_banner\n"); 
+    log_info("\n I'm in netconf run before show_server_banner\n");
     show_server_banner();
+    printf("\n I'm in netconf run after show_server_banner before agt_ncxserver_run\n"); 
+    log_info("\n I'm in netconf run after show_server_banner before agt_ncxserver_run\n");
     res = agt_ncxserver_run();
+      printf("\n I'm in netconf run after agt_ncxserver_run\n"); 
+    log_info("\n I'm in netconf run after agt_ncxserver_run\n");
     if (res != NO_ERR) {
         log_error("\nncxserver failed (%s)", get_error_string(res));
     }
@@ -330,7 +336,8 @@ int main (int argc, char *argv[])
      * restart, then the loop will only be executed once */
     while (!done) {
         res = cmn_init( argc, argv, &showver, &showhelpmode );
-    
+        printf("\n I'm in the main function in netconfd.c \n"); 
+        log_info("\n I'm in the main function in netconfd.c \n");
         if (res != NO_ERR) {
             log_error( "\nnetconfd: init returned (%s)", 
                        get_error_string(res) );
@@ -342,7 +349,11 @@ int main (int argc, char *argv[])
                 help_program_module( NETCONFD_MOD, NETCONFD_CLI, showhelpmode );
                 agt_request_shutdown(NCX_SHUT_EXIT);
             } else {
+                printf("\n I'm in the main before netconf run \n"); 
+                log_info("\n I'm in the main before netconf run \n");
                 res = netconfd_run();
+                printf("\n I'm in the main after netconf run \n"); 
+                log_info("\n I'm in the main after netconf run \n");
                 if (res != NO_ERR) {
                     agt_request_shutdown(NCX_SHUT_EXIT);
                 }

@@ -77,6 +77,7 @@ typedef struct mgr_rpc_req_t_ {
     uint32         group_id;
     obj_template_t *rpc;
     xmlChar       *msg_id;       /* malloced message ID */
+    xmlChar        *exec_time;
     xml_attrs_t    attrs;          /* Extra <rpc> attrs */
     val_value_t   *data;      /* starts with the method */
     time_t         starttime;     /* tstamp for timeout */
@@ -92,6 +93,7 @@ typedef struct mgr_rpc_rpy_t_ {
     /* xml_msg_hdr_t  mhdr; */
     uint32         group_id;
     xmlChar       *msg_id;
+    xmlChar       *exec_time;
     status_t       res;
     val_value_t   *reply;
 } mgr_rpc_rpy_t;

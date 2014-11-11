@@ -236,6 +236,9 @@ static mgr_rpc_req_t *
     find_request (ses_cb_t *scb,
                   const xmlChar *msg_id)
 {
+
+    printf ("\nInside file:mgr_rpc.c  function: find_request\n");
+    log_stdout ("\nInside file:mgr_rpc.c  function: find_request\n");
     mgr_scb_t *mscb;
     mgr_rpc_req_t *req;
 
@@ -566,9 +569,18 @@ status_t
     if (res == NO_ERR) {
         res = xml_add_attr(&req->attrs, 
                            0, 
-                           NCX_EL_MESSAGE_ID,
+                           //NCX_EL_MESSAGE_ID,
+                           (const xmlChar *)"BABA",
                            req->msg_id);
     }
+
+ if (res == NO_ERR) {
+        res = xml_add_attr(&req->attrs,
+                           0,
+                           "EYLON",
+                           req->exec_time);
+    }
+
 
     /* set perf timestamp in case response timing active */
     gettimeofday(&req->perfstarttime, NULL);     

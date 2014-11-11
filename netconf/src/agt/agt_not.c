@@ -93,6 +93,9 @@ date         init     comment
     (const xmlChar *)"startTime"
 #define notifications_N_create_subscription_stopTime \
     (const xmlChar *)"stopTime"
+#define notifications_N_create_subscription_tal_time_extention \
+    (const xmlChar *)"tal_time_extention"
+
 #define nc_notifications_N_netconf (const xmlChar *)"netconf"
 #define nc_notifications_N_streams (const xmlChar *)"streams"
 #define nc_notifications_N_stream (const xmlChar *)"stream"
@@ -301,10 +304,10 @@ static status_t
                                   rpc_msg_t *msg,
                                   xml_node_t *methnode)
 {
-    const xmlChar           *stream, *startTime, *stopTime;
-    xmlChar                 *starttime_utc, *stoptime_utc;
+    const xmlChar           *stream, *startTime, *stopTime, *talTime;
+    xmlChar                 *starttime_utc, *stoptime_utc , *tal_time_utc;
     val_value_t             *valstream, *valfilter, *valselect;
-    val_value_t             *valstartTime, *valstopTime;
+    val_value_t             *valstartTime, *valstopTime, *valtal_time_extention;
     agt_not_subscription_t  *sub, *testsub;
     xmlChar                  tstampbuff[TSTAMP_MIN_SIZE];
     int                      ret;
@@ -319,8 +322,10 @@ static status_t
     valfilter = NULL;
     valselect = NULL;
     valstartTime = NULL;
+    valtal_time_extention = NULL;
     valstopTime = NULL;
     startTime = NULL;
+    talTime = NULL;
     stopTime = NULL;
     starttime_utc = NULL;
     stoptime_utc = NULL;
@@ -373,6 +378,50 @@ static status_t
             } /* else error already recorded if not NO_ERR */
         }
     }
+//our extention
+     //notifications_N_create_subscription_tal_time_extention
+    valtal_time_extention =
+        val_find_child(msg->rpc_input,
+                       AGT_NOT_MODULE1,
+                       notifications_N_create_subscription_tal_time_extention);\
+   
+    if (valtal_time_extention) {
+        printf("\n YOU GOT TIME EXTETION\n");
+        log_stdout("\n YOU GOT TIME EXTETION\n");
+        talTime =  VAL_STR(valtal_time_extention);
+        printf("\n try time is: %s\n" , talTime);
+        log_stdout("\n try time is: %s\n" , talTime);
+        printf("\ntalTime after VAL STR= %s \n", talTime);
+        log_stdout("\ntalTime after VAL STR= %s \n", talTime);
+
+           printf("\ntry current time = %s\n" , tstampbuff);
+        log_stdout("\ntry current time = %s\n" , tstampbuff);
+         res = NO_ERR;
+        /* Normalize the xsd:dateTime strings first */
+         isnegative = FALSE;
+         printf("\nbefore tal_time_utc\n");
+        log_stdout("\nbefore tal_time_utc\n");
+         tal_time_utc =
+                  tstamp_convert_to_utctime(talTime,
+                                            &isnegative,
+                                            &res);
+         printf("\nafter tal_time_utc\n");
+        log_stdout("\nafter tal_time_utc\n");
+        ret = xml_strcmp(tal_time_utc, tstampbuff);
+        printf("\nstrcmp - good\n");
+        log_stdout("\nstrcmp - good\n");
+
+        printf("\nret = %d\n" , ret);
+        log_stdout("\nret = %d\n" , ret);
+        
+    }
+    else {
+       printf("\n YOU DON'T HAVE TIME EXTETION\n");
+       log_stdout("\n YOU DON'T HAVE TIME EXTETION\n");
+    }
+    
+// end of our extetion
+ 
 
     /* get the startTime parameter */
     valstartTime = 

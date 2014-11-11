@@ -348,6 +348,8 @@ static status_t
     } else {
         msg->rpc_datacb = agt_output_filter;
     }
+    printf ("\nInside agt_ncx. print1\n");
+    log_stdout ("\nInside agt_ncx. print1\n");
 
     return NO_ERR;
 
@@ -457,6 +459,8 @@ static status_t
     } else {
         msg->rpc_datacb = agt_output_filter;
     }
+    printf ("\nInside agt_ncx. print2\n");
+    log_stdout ("\nInside agt_ncx. print2\n");
 
     return NO_ERR;
 

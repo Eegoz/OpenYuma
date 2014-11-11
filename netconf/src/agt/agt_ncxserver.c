@@ -207,6 +207,8 @@ status_t
     status_t               res;
     boolean                done, done2, stream_output;
 
+     log_info("\n I'm in agt_ncxserver_run first line \n");
+     printf("\n I'm in agt_ncxserver_run first line\n");
     /* Create the socket and set it up to accept connections. */
     res = make_named_socket(NCXSERVER_SOCKNAME, &ncxsock);
     if (res != NO_ERR) {
@@ -237,9 +239,10 @@ status_t
 
     done = FALSE;
     while (!done) {
-
+            log_info("\n I'm in agt_ncxserver_run outer loop \n");
+	    printf("\n I'm in agt_ncxserver_run outer loop\n");
         /* check exit program */
-        if (agt_shutdown_requested()) {
+       if (agt_shutdown_requested()) {
             done = TRUE;
             continue;
         }
@@ -247,6 +250,9 @@ status_t
         ret = 0;
         done2 = FALSE;
         while (!done2) {
+              
+           // log_info("\n I'm in agt_ncxserver_run inner loop \n");
+	    //printf("\n I'm in agt_ncxserver_run inner loop\n");
             read_fd_set = active_fd_set;
             agt_ses_fill_writeset(&write_fd_set, &maxwrnum);
             timeout.tv_sec = AGT_NCXSERVER_TIMEOUT;
@@ -356,6 +362,7 @@ status_t
                     }
 
                     /* get a new session control block */
+                 
                     if (!agt_ses_new_session(SES_TRANSPORT_SSH, new)) {
                         close(new);
                         if (LOGINFO) {
@@ -381,6 +388,8 @@ status_t
                      */
                     scb = def_reg_find_scb(i);
                     if (scb != NULL) {
+                        printf ("before ses_accept_input\n");
+                        log_info("before ses_accept_input\n");
                         res = ses_accept_input(scb);
                         if (res != NO_ERR) {
                             if (i >= maxrdnum) {

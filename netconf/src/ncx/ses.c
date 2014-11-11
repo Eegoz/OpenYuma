@@ -117,7 +117,10 @@ static status_t
     boolean         done;
     xmlChar         ch;
     uint32          count;
+    char temp;
 
+    printf ("Inside accept_buffer_ssh_v10");
+    log_info ("Inside accept_buffer_ssh_v10");
 #ifdef SES_DEBUG
     if (LOGDEBUG3 && scb->state != SES_ST_INIT) {
         scb->readbuff[len] = 0;
@@ -211,6 +214,8 @@ static status_t
 
         /* get the next char in the input buffer and advance the pointer */
         ch = scb->readbuff[count++];
+        temp=(char)ch;
+        printf ("%c", &temp);
         buff->buff[buff->buffpos++] = ch;
 
         /* handle the char in the buffer based on the input state */
@@ -372,7 +377,10 @@ static status_t
     xmlChar         ch;
     size_t          chunkleft, inbuffleft, outbuffleft, copylen;
     ncx_num_t       num;
+    char temp = 'A';
 
+     printf ("Inside accept_buffer_ssh_v11");
+     log_info ("Inside accept_buffer_ssh_v11");
 #ifdef SES_DEBUG
     if (LOGDEBUG3 && scb->state != SES_ST_INIT) {
         scb->readbuff[len] = 0;
@@ -559,6 +567,8 @@ static status_t
             inbuffleft = len - count;
             outbuffleft = SES_MSG_BUFFSIZE - buff->buffpos;
             copylen = min(inbuffleft, chunkleft);
+            printf (" INMSG - before print\n");
+            printf("line: %x\n" , &buff);
 
             /* account for the amount copied above */
             msg->curchunksize += copylen;
@@ -1787,6 +1797,8 @@ status_t
     }
 #endif
 
+    printf ("\nInside ses_accept_inpue\n");
+    //log_info("Inside ses_accept_inpue\n");
     res = NO_ERR;
     done = FALSE;
     readdone = FALSE;

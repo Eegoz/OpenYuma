@@ -220,6 +220,14 @@ module yuma-netconf {
      }
    }
 
+   typedef execute_time {
+     description "project additional flag";
+     type  string {
+        length "1..4095";
+     }
+   }
+
+
    typedef ErrorType {
      description "NETCONF Error Type";
      type enumeration {
@@ -752,6 +760,12 @@ module yuma-netconf {
       reference "RFC 4741, section 7.2";
 
       input {
+
+        leaf david {
+                 type yang:date-and-time;
+             }
+       
+
         container source {
           description "Particular configuration to retrieve.";
 
@@ -773,6 +787,10 @@ module yuma-netconf {
                  not all servers will support filtering for this
                  database.";
             }
+
+
+
+
           }
         }
         anyxml filter {

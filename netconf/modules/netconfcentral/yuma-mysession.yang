@@ -6,6 +6,7 @@ module yuma-mysession {
 
   import yuma-app-common { prefix appcmn; }
   import ietf-netconf-with-defaults { prefix wd; }
+  import ietf-netconf-time { prefix nct; }
 
   organization  "Netconf Central";
 

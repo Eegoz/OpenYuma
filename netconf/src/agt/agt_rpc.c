@@ -63,7 +63,8 @@ date         init     comment
 #include "xml_util.h"
 #include "xml_wr.h"
 #include "yangconst.h"
-
+#include <stdio.h>
+#include <stdlib.h>
 
 /********************************************************************
 *                                                                   *
@@ -590,7 +591,7 @@ static void
     /* check which reply variant needs to be sent */
     if (dlq_empty(&msg->mhdr.errQ) && !datasend) {
         /* no errors and no data, so send <ok> variant */
-        xml_wr_empty_elem(scb, &msg->mhdr, ncid, ncid, NCX_EL_OK, indent);
+       xml_wr_empty_elem(scb, &msg->mhdr, ncid, ncid, NCX_EL_OK, indent);
     } else {
         /* send rpcResponse variant
          * 0 or <rpc-error> elements followed by
@@ -646,7 +647,11 @@ static void
                     xml_wr_full_val(scb, &msg->mhdr, val, indent);
                 }
             }
-
+//          ses_putstr(scb, (const xmlChar *)"ALON");
+//          ses_putstr(scb , "<execution-time>");
+ //         ses_putstr(scb, "2014-03-11T22:33:01.123456Z");
+ //         ses_putstr(scb , "</execution-time>");
+   
             /* only indent the </data> end tag if any data written */
             datawritten = (outbytes != SES_OUT_BYTES(scb));
 
@@ -658,10 +663,37 @@ static void
                                 (datawritten) ? indent : -1);
             }
         }
-    } 
+    }
+FILE *fp;
+fp = fopen("/home/server/OpenYuma-master/libtest/src/time_log.txt", "r");
+char*  x_string;
+char str[99];
+while (fscanf(fp, "%s", str)!=EOF){   
+     x_string=str;
+  //   printf("LALA: %s\n",str); 
+  //    printf("BABA: %s\n",x_string);
+}
+fclose(fp); 
 
+int length=strlen(x_string);
+char TAG[30] ;
+strcpy(TAG,  x_string);
+TAG[length]='\n';
+printf("BABA: %s\n",x_string);
+printf("\n\n\nRARA: %s\n\n\n",TAG);
+//const xmlChar * DDD = x_string;
+xmlChar * good = x_string;
+//xml_wr_begin_elem(scb, &msg->mhdr, ncid, rpcid, DDD, indent);
+//xml_wr_begin_elem(scb, &msg->mhdr, ncid, rpcid, (const xmlChar *)"GOOD:GOOD", indent);
+//xml_wr_begin_elem(scb, &msg->mhdr, ncid, rpcid, good, indent);
     /* generate the <rpc-reply> end tag */
-    xml_wr_end_elem(scb, &msg->mhdr, ncid, NCX_EL_RPC_REPLY, 0);
+//ses_putstr(scb , str);
+begin_elem_ex(scb, &msg->mhdr, ncid, rpcid,"msg", (const xmlChar *)"GOOD:GOOD", FALSE, indent, FALSE, 0, FALSE);
+
+//xml_wr_end_elem(scb, &msg->mhdr, ncid, good, 0);
+//xml_wr_end_elem(scb, &msg->mhdr, ncid, (const xmlChar *)"GOOD:GOOD", 0);
+//xml_wr_end_elem(scb, &msg->mhdr, ncid, DDD, 0);
+ xml_wr_end_elem(scb, &msg->mhdr, ncid, NCX_EL_RPC_REPLY, 0);
 
     /* finish the message */
     ses_finish_msg(scb);
@@ -1522,6 +1554,7 @@ void
     /* parameter set parse state */
     if (res == NO_ERR) {
         res = parse_rpc_input(scb, msg, rpcobj, &method);
+        printf ("\n in dispatch. res1 = %s\n" , res);
     }
 
     /* read in a node which should be the endnode to match 'top' */
@@ -1550,6 +1583,7 @@ void
         while (res==NO_ERR) {
             /* do not add errors such as unknown namespace */
             res = agt_xml_consume_node(scb, &testnode, NCX_LAYER_NONE, NULL);
+            printf ("\n in dispatch. res2 = %s\n" , res);
             if (res==NO_ERR) {
                 res = ERR_NCX_UNKNOWN_ELEMENT;
                 errstr = (char *)xml_strdup((const xmlChar *)RPC_ROOT);

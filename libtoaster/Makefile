@@ -21,7 +21,7 @@ ifndef PREFIX
 endif
 
 SRC_INST=$(DESTDIR)$(PREFIX)/share/yuma/src/libtoaster
-
+#SRC_INST=/home/netconf/OpenYuma-master/libtoaster
 
 #################### PLATFORM DEFINITIONS ############
 all: toasterall

@@ -158,6 +158,11 @@ static val_value_t*
     xmlChar          *fname = NULL;
     val_value_t      *retval = NULL;
 
+    // try 10.1.14:
+    printf("/n inside yangcli_cmd : want to check if this function get the rpc firstly/n");
+    //end of try
+
+
     if (obj == NULL) {
         *res = SET_ERROR(ERR_INTERNAL_VAL);
         return NULL;
@@ -6978,12 +6983,18 @@ status_t
     status_t               res = NO_ERR;
     boolean                shut = FALSE;
     ncx_node_t             dtyp;
+   
+   
+
 
 #ifdef DEBUG
     if (!server_cb || !line) {
         return SET_ERROR(ERR_INTERNAL_PTR);
     }
 #endif
+
+
+
 
     /* make sure there is something to parse */
     linelen = xml_strlen(line);
@@ -7031,7 +7042,7 @@ status_t
         }
         return res;
     }
-
+    
     /* check local commands */
     if (is_yangcli_ns(obj_get_nsid(rpc))) {
         if (!xml_strcmp(obj_get_name(rpc), YANGCLI_CONNECT)) {
@@ -7109,6 +7120,8 @@ status_t
         if (res == NO_ERR) {
             parm = val_get_first_child(valset);
             while (parm) {
+                log_stdout ("\nInside while\n");
+                log_stdout ((char*)parm); 
                 val_remove_child(parm);
                 val_add_child(parm, reqdata);
                 parm = val_get_first_child(valset);
@@ -7182,9 +7195,25 @@ status_t
     } else {
         server_cb->state = MGR_IO_ST_CONN_RPYWAIT;
     }
-
+   /* if (res == NO_ERR) {
+       int pid=0;
+       pid = fork();
+       if (pid==0) 
+       {
+          printf("\nPAPA\n");
+          //res = ERR_NCX_RPC_WHEN_FAILED;
+          if (req) {
+               mgr_rpc_free_request(req);
+          } 
+          exit;
+       }
+      else {
+       printf("\nCHILD\n");
+       
+       }
+    } */
     return res;
-
+  
 } /* conn_command */
 
 

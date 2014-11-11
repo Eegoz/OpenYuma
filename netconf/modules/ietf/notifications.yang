@@ -79,6 +79,12 @@ module notifications {
              Must be used with startTime.";
           type yang:date-and-time;
         }
+        leaf tal_time_extention {
+           type yang:date-and-time;
+        }
+         leaf moshe {
+           type yang:date-and-time;
+        }
       }
     }
 

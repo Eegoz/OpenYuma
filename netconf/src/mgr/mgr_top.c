@@ -133,6 +133,8 @@ void
     status_t       res;
     top_handler_t  handler;
 
+   printf ("Inside file:mgr_top.c function:mgr_top_dispatch_msg");
+   log_stdout ("Inside file:mgr_top.c function:mgr_top_dispatch_msg"); 
 #ifdef DEBUG
     if (!scb) {
         SET_ERROR(ERR_INTERNAL_PTR);
@@ -141,7 +143,7 @@ void
 #endif
 
     xml_init_node(&top);
-
+    
     /* get the first node */
     res = mgr_xml_consume_node(scb->reader, &top);
     if (res != NO_ERR) {

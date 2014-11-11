@@ -1009,6 +1009,7 @@ static void
 
     /* write the element name */
     ses_putstr(scb, elname);
+    //ses_putstr(scb, "EYLONNNNNNNNN");
 
     /* write the wda:default element if needed
      * hack: bypass usual checking for xmlns needed because the
@@ -1141,7 +1142,7 @@ void
 {
     assert( scb && "scb is NULL" );
     assert( msg && "msg is NULL" );
-    assert( elname && "elname is NULL" );
+    assert( elname && "elname is NULL" );    
 
     begin_elem_ex(scb, msg, parent_nsid, nsid, elname, attrQ,
                   isattrq, indent, empty, 0, FALSE);

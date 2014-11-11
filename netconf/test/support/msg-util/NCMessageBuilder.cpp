@@ -104,6 +104,7 @@ string NCMessageBuilder::buildRPCMessage( const std::string& queryStr,
     query << "<rpc message-id=\"" << messageId << "\"\n"
           << "     " << genXmlNsNcText( IETF_NS ) << "\n"
           << "     " << genXmlNsText( IETF_NS ) << ">\n"
+          << " SHAUL    " << genXmlNsText( IETF_NS ) << ">\n"
           << queryStr << "\n"
           << "</rpc>";
 

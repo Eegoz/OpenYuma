@@ -750,6 +750,7 @@ void
     }
 
     if (ok) {
+        printf ("ALON: Maybe here ???");
         log_write("\nXML node (%d:%d): %s %s",
                   node->nsid, node->depth, typ, 
                   (nam) ? (const char *)node->elname : "");
@@ -763,6 +764,10 @@ void
             log_write("\n   attr: ns:%d name:%s (%s)",
                       attr->attr_ns, 
                       (const char *)attr->attr_name, 
+                      (const char *)attr->attr_val);
+           printf("\n PLEASE  attr: ns:%d name:%s (%s)",
+                      attr->attr_ns,
+                      (const char *)attr->attr_name,
                       (const char *)attr->attr_val);
         }
     } else {

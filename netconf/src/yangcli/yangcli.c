@@ -352,6 +352,7 @@ static GlAfterTimeout
     retval = mgr_io_process_timeout(scb->sid, &wantdata, &anystdout);
     if (retval) {
         /* this session is probably still alive */
+        //printf ("\n im still alive  (inside GlaAfterTimeout\n");
         if (wantdata) {
             server_cb->returncode = MGR_IO_RC_WANTDATA;
         } else {

@@ -122,9 +122,9 @@ static int
     toaster_toasting = FALSE;
     toaster_timer_id = 0;
     if (LOGDEBUG2) {
-        log_debug2("\ntoast is finished");
+        log_debug2("\ntoast is bbbb");
     }
-    y_toaster_toastDone_send((const xmlChar *)"done");
+    y_toaster_toastDone_send((const xmlChar *)"bob");
     return 0;
 
 } /* toaster_timer_fn */
@@ -587,7 +587,7 @@ static status_t
      */
 
     if (LOGDEBUG) {
-        log_debug("\ntoaster: starting toaster for %u seconds",
+        log_debug("\ntoaster: starting not_shared for %u ffff",
                   toaster_duration);
     }
 

@@ -388,7 +388,7 @@ status_t
         ret = 0;
 
         while (!done2) {
-            /* will block in idle states waiting for user KBD input
+             /* will block in idle states waiting for user KBD input
              * while no command is active
              */
             if (stdin_handler != NULL) {
@@ -587,7 +587,7 @@ boolean
     /* setup select parameters */
     anyread = FALSE;
     timeout.tv_sec = 0;
-    timeout.tv_usec = 100;
+    timeout.tv_usec =100;
     read_fd_set = active_fd_set;
 
     if (!any_fd_set(&read_fd_set, maxrdnum)) {

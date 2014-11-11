@@ -27,7 +27,7 @@
 
     - XmlReader utilities
       - xml_get_reader_from_filespec  (parse debug test documents)
-      - xml_get_reader_for_session
+      - xml_get_reader__for_session
       - xml_reset_reader_for_session
       - xml_free_reader
       - xml_get_node_name   (xmlparser enumeration for node type)

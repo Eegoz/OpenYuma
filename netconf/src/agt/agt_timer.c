@@ -303,7 +303,7 @@ status_t
 {
     agt_timer_cb_t *timer_cb;
     uint32          timer_id;
-
+   // seconds=0;
 #ifdef DEBUG
     if (timer_fn == NULL || ret_timer_id == NULL) {
         return SET_ERROR(ERR_INTERNAL_PTR);

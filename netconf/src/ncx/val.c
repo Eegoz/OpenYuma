@@ -66,7 +66,7 @@ date         init     comment
 #include "xpath1.h"
 #include "xpath_yang.h"
 #include "yangconst.h"
-
+#include <math.h>
 
 /********************************************************************
 *                                                                   *
@@ -3544,6 +3544,8 @@ void
     val_dump_value (val_value_t *val,
                     int32 startindent)
 {
+
+printf("\nINSIDE val_dump_value\n");
 #ifdef DEBUG
     if (!val) {
         SET_ERROR(ERR_INTERNAL_PTR);
@@ -3740,6 +3742,7 @@ void
     status_t            res;
     boolean             quotes;
     int32               bump_amount;
+    int                 flag=0;
 
 #ifdef DEBUG
     if (!val) {
@@ -3747,6 +3750,8 @@ void
         return;
     }
 #endif
+
+   //printf("\nInside val_dump_value_max 1\n");
 
     bump_amount = max(0, indent_amount);
 
@@ -3791,6 +3796,7 @@ void
         }
         return;
     }
+  //printf ("\nInside val_dump_value_max 2\n");
 
     switch (dumpmode) {
     case DUMP_VAL_NONE:
@@ -3814,21 +3820,25 @@ void
         SET_ERROR(ERR_INTERNAL_VAL);
         return;
     }
+  //printf ("\nInside val_dump_value_max 3\n");
 
     /* indent and print the val name */
     (*indentfn)(startindent);
     if (display_mode == NCX_DISPLAY_MODE_PLAIN) {
         if (val->btyp == NCX_BT_EXTERN) {
+printf ("\nInside val_dump_value_max 4\n");
             (*dumpfn)("%s (extern=%s) ", 
                       (val->name) ? (const char *)val->name : "--",
                       (val->v.fname) ? (const char *)val->v.fname : "--");
         } else if (val->btyp == NCX_BT_INTERN) {
+printf ("\nInside val_dump_value_max 5\n");
             (*dumpfn)("%s (intern) ",
                       (val->name) ? (const char *)val->name : "--");
         } else if (dumpmode == DUMP_VAL_ALT_LOG &&
                    !xml_strcmp(val->name, NCX_EL_DATA)) {
             ;  /* skip the name */
         } else {
+// printf ("\nInside val_dump_value_max 6.1\n");
             (*dumpfn)("%s ", (val->name) ? (const char *)val->name : "--");
         }
     } else {
@@ -3854,14 +3864,18 @@ void
                    !xml_strcmp(val->name, NCX_EL_DATA)) {
             ;  /* skip the name */
         } else {
+//printf ("\nInside val_dump_value_max 9\n");
             (*dumpfn)("%s:%s ", 
                       prefix,
                       (val->name) ? (const char *)val->name : "--");
         }
     }
-
+//printf ("\nAWWWWww YEAAAAAAAA  %s" , (val->name) ? (const char *)val->name : "--");
+//printf ("\nInside val_dump_value_max 10\n");
+if (strcmp((const char *)val->name,"scheduled-time") == 0) flag = 1;
+//printf ("\nFlag = %d\n" , flag);
     btyp = val->btyp;
-
+//printf ("\nInside val_dump_value_max 4\n");
     /* check if an index clause needs to be printed next */
     if (!dlq_empty(&val->indexQ)) {
         res = val_get_index_string(NULL, 
@@ -3888,16 +3902,21 @@ void
             }
         }
     }
-
+//printf ("\nInside val_dump_value_max 10.5\n");
+// printf ("\nInside val_dump_value_max 5\n");
     /* dump the value, depending on the base type */
     switch (btyp) {
+  //  printf ("\nInside val_dump_value_max 11\n");
     case NCX_BT_NONE:
         SET_ERROR(ERR_INTERNAL_VAL);
+    //    printf ("\nInside val_dump_value_max 12\n");
         break;
     case NCX_BT_ANY:
         (*dumpfn)("(any)");
+       printf ("\nInside val_dump_value_max 13\n");
         break;
     case NCX_BT_ENUM:
+        printf ("\nInside val_dump_value_max 14\n");
         if (val->v.enu.name) {
             if (val_need_quotes(val->v.enu.name)) {
                 (*dumpfn)("\'%s\'", (const char *)val->v.enu.name);
@@ -3907,11 +3926,13 @@ void
         }
         break;
     case NCX_BT_EMPTY:
+        printf ("\nInside val_dump_value_max 15\n");
         if (!val->v.boo) {
             (*dumpfn)("(not set)");   /* should not happen */
         }
         break;
     case NCX_BT_BOOLEAN:
+        printf ("\nInside val_dump_value_max 16\n");
         if (val->v.boo) {
             (*dumpfn)("true");
         } else {
@@ -3929,6 +3950,7 @@ void
     case NCX_BT_DECIMAL64:
     case NCX_BT_FLOAT64:
         switch (dumpmode) {
+          printf ("\nInside val_dump_value_max A2\n");
         case DUMP_VAL_STDOUT:
             stdout_num(btyp, &val->v.num);
             break;
@@ -3964,14 +3986,69 @@ void
             if (val->obj && obj_is_password(val->obj)) {
                 (*dumpfn)("%s", VAL_PASSWORD_STRING);
             } else {
+              //   printf ("\nHere3 \n");
                 (*dumpfn)("%s", (const char *)VAL_STR(val));
+                if ( 1 == flag ){
+                    printf ("\nFlag = %d\n" , flag);
+                    char* date = (char*)VAL_STR(val);
+                    int current_time_sec=0;
+                    int current_time_min=0;
+                    int current_time_hour=0;
+                    int wanted_sec=0;
+                    int wanted_min=0;
+                    int wanted_sleep_time=0;
+                    time_t timer = time(0);
+                    struct tm* tm_info = localtime(&timer);
+                   printf ("\ndate = %s \n" , date); 
+                   FILE *fp;
+                   static int i=1;
+                   fp = fopen("/home/server/OpenYuma-master/libtest/src/time_log.txt", "a");
+                   fprintf(fp,"\ncommand number %d wanted  time = %s", i, date);
+                   i++;
+                   fclose (fp);
+                   printf ("\ncurrent time = ");
+                   printf(ctime(&timer));
+                   current_time_sec = tm_info->tm_sec;
+                   current_time_min = tm_info->tm_min;
+                   current_time_hour = tm_info->tm_hour;
+               
+                  // TRY MICRO SEC
+                  struct timeval shmulzi;
+                  gettimeofday(&shmulzi, NULL);
+                  //do stuff
+                  printf("\nMICRO!: took %lu\n", shmulzi.tv_usec); 
+                   // END TRY MICRO
+
+                  //printf("\natoi: %d\n" ,atoi(date[17]);
+	           wanted_min = (date[14]-'0')*10+(date[15]-'0');
+                  wanted_sec = (date[17]-'0')*10+(date[18]-'0'); //  *10+atoi((date[18]);
+                 int given_time_length=strlen(date);
+                 int num_of_digits_after_sec = given_time_length - 21;
+                 int wanted_micro = 0;
+                 printf ("\n Num of digits after sec =%d \n" , num_of_digits_after_sec);
+                 for (int i=0; i<num_of_digits_after_sec ; i++){
+                     printf("\nNext digit = %c \n" , date[20+i]);  
+                     wanted_micro = wanted_micro + pow(10,5-i)*(date[20+i]-'0');  
+                 }
+                 printf ("\nReceived MICRO = %lu", wanted_micro);
+                 wanted_sleep_time=(wanted_min*60+wanted_sec)-(current_time_min*60+current_time_sec);
+		
+                 wanted_micro = wanted_micro - shmulzi.tv_usec; 
+                 printf("\nMICRO!: shmulzi = %d\n", shmulzi.tv_usec);
+		 printf ("\nwanted_micro = %d\n", wanted_micro);
+                 printf ("\nwanted - shmulzi = %d\n" , wanted_micro - shmulzi.tv_usec);
+                 printf ("\ndifference\n = %d " , wanted_sleep_time);  
+                 if (wanted_sleep_time>0) usleep(1000000*wanted_sleep_time+wanted_micro);
+                }
             }
             if (quotes) {
+                 printf ("\nHere4 \n");
                 (*dumpfn)("%c", VAL_QUOTE_CH);
             }
         }
         break;
     case NCX_BT_IDREF:
+printf ("\nInside val_dump_value_max S2\n");
         idref = VAL_IDREF(val);
         if (idref->nsid && idref->name) {
             (*dumpfn)("%s:%s",
@@ -3983,6 +4060,7 @@ void
         break;
     case NCX_BT_SLIST:
     case NCX_BT_BITS:
+printf ("\nInside val_dump_value_max S3\n");
         if (dlq_empty(&val->v.list.memQ)) {
             (*dumpfn)("{ }");
         } else {
@@ -4003,6 +4081,7 @@ void
                         if (quotes) {
                             (*dumpfn)("%c", VAL_QUOTE_CH);
                         }
+                        printf ("ncx/val.c EYLON %s ", (const char *)listmem->val.str); 
                         (*dumpfn)("%s ", (const char *)listmem->val.str);
                         if (quotes) {
                             (*dumpfn)("%c", VAL_QUOTE_CH);
@@ -4010,6 +4089,8 @@ void
                     }
                 } else if (typ_is_number(lbtyp)) {
                     switch (dumpmode) {
+  printf ("\nInside val_dump_value_max A3\n");
+
                     case DUMP_VAL_STDOUT:
                         stdout_num(lbtyp, &listmem->val.num);
                         break;
@@ -4025,6 +4106,7 @@ void
                     (*dumpfn)(" ");
                 } else {
                     switch (lbtyp) {
+                  printf ("\nInside val_dump_value_max A4\n");
                     case NCX_BT_ENUM:
                         if (listmem->val.enu.name) {
                             (*dumpfn)("%s ",
@@ -4048,6 +4130,7 @@ void
             (*dumpfn)("}");
         }
         break;
+printf ("\nInside val_dump_value_max 99\n");
     case NCX_BT_LIST:
     case NCX_BT_CONTAINER:
     case NCX_BT_CHOICE:   // should not happen
@@ -4068,10 +4151,12 @@ void
         (*dumpfn)("}");
         break;
     case NCX_BT_EXTERN:
+printf ("\nInside val_dump_value_max 100\n");
         (*dumpfn)("{");
         (*indentfn)(startindent);
 
         switch (dumpmode) {
+  printf ("\nInside val_dump_value_max A5\n");
         case DUMP_VAL_STDOUT:
             stdout_extern(val->v.fname);
             break;
@@ -4089,10 +4174,12 @@ void
         (*dumpfn)("}");
         break;
     case NCX_BT_INTERN:
+printf ("\nInside val_dump_value_max 101\n");
         (*dumpfn)("{");
         (*indentfn)(startindent);
 
         switch (dumpmode) {
+  printf ("\nInside val_dump_value_max A6\n");
         case DUMP_VAL_STDOUT:
             stdout_intern(val->v.intbuff);
             break;
@@ -4112,7 +4199,7 @@ void
     default:
         (*errorfn)("\nval: illegal btype (%d)", btyp);
     }    
-
+// printf ("\nInside val_dump_value_max 6\n");
     /* dump the metadata queue if non-empty */
     if (with_meta) {
         metaQ = val_get_metaQ(val);
@@ -4120,7 +4207,7 @@ void
             if (startindent >= 0) {
                 (*indentfn)(startindent+bump_amount);
             }
-
+printf ("\nInside val_dump_value_max S5\n");
             (*dumpfn)("%s.metaQ ", val->name);
             for (metaval = val_get_first_meta(metaQ);
                  metaval != NULL;

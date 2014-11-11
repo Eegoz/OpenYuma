@@ -109,7 +109,7 @@ void
         return;
     }
 #endif
-
+    printf ("Inside agt_top_dispatch_msg\n");
     myagttotals = ses_get_total_stats();
     profile = agt_get_profile();
 
